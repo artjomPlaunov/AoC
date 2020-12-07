@@ -92,6 +92,7 @@ func isValidField(field, value string) bool {
             if len(value) != 7 {
                 return false
             } else {
+                /*
                 if value[0] != '#' {
                     return false
                 } else {
@@ -102,7 +103,8 @@ func isValidField(field, value string) bool {
                         }
                     }
                     return true
-                }
+                }*/
+                return true
             }
         case "ecl":
             ecl := map[string]bool{
@@ -118,11 +120,12 @@ func isValidField(field, value string) bool {
             if len(value) != 9 {
                 return false
             } else {
+                /*
                 for _,c := range value {
                     if c < '0' || c > '9' {
                         return false
                     }
-                }
+                }*/
                 return true
             }
         default:
