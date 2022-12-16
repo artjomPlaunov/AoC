@@ -57,14 +57,15 @@ goMonk monk monkMap [] =
   let adjustFunc m = m { items = [] } in
   Map.adjust adjustFunc (monkID monk) monkMap
 goMonk monk monkMap (i:is) =
-  let worry = (op monk) i 
-      adjustFunc m = m { items = (items m)++[worry]} 
+  let worry = ((op monk) i)
+      adjustFunc m = m { items = (items m)++[worry `mod` 9699690]} 
   in 
     if (test monk) worry
     then goMonk monk (Map.adjust adjustFunc (testTrue monk) monkMap) is
     else goMonk monk (Map.adjust adjustFunc (testFalse monk) monkMap) is
       
-
+--mod1=96577
+--mod2=9699690
 
 --------------------------------------------------------------------------------
 --Hardcoded input for main program.
@@ -73,7 +74,7 @@ main :: IO ()
 main =
   do
     let monk0 = Monk {monkID = 0, items = [79, 98], op = (*19),
-                      test = (isDiv 23), testTrue = 2, testFalse = 3}
+                      test = (isDiv 23),  testTrue = 2, testFalse = 3}
     let monk1 = Monk {monkID = 1, items = [54, 65, 75, 74], op = (+6),
                       test = (isDiv 19), testTrue = 2, testFalse = 0}
     let monk2 = Monk {monkID = 2, items = [79, 60, 97], op = (\x -> x * x),
@@ -82,39 +83,32 @@ main =
                       test = (isDiv 17), testTrue = 0, testFalse = 1}
     let monks = [monk0, monk1, monk2, monk3]
     let order = [0, 1, 2, 3]
-    -- map monkID -> monk
-    let monkMap = Map.fromList (zip order monks)
-    let countMap = Map.fromList (zip order [0,0,0,0])
-    let (monkMap', countMap') =
-          goRounds monkMap countMap (Map.toAscList monkMap) 20
-    putStrLn $ show monkMap'
-    putStrLn $ show countMap'
     let monk0 = Monk {monkID = 0, items = [52, 60, 85, 69, 75, 75], op = (*17),
                       test = (isDiv 13), testTrue = 6, testFalse = 7}
     let monk1 = Monk {monkID = 1, items = [96, 82, 61, 99, 82, 84, 85],
                       op = (+8),
                       test = (isDiv 7), testTrue = 0, testFalse = 7}
     let monk2 = Monk {monkID = 2, items = [95, 79], op = (+6),
-                      test = (isDiv 19), testTrue = 5, testFalse = 3}
+                      test = (isDiv 19),  testTrue = 5, testFalse = 3}
     let monk3 = Monk {monkID = 3, items = [88, 50, 82, 65, 77], op = (*19),
-                      test = (isDiv 2), testTrue = 4, testFalse = 1}
+                      test = (isDiv 2),  testTrue = 4, testFalse = 1}
     let monk4 = Monk {monkID = 4, items = [66, 90, 59, 90, 87, 63, 53, 88],
                       op = (+7),
                       test = (isDiv 5), testTrue = 1, testFalse = 0}
     let monk5 = Monk {monkID = 5, items = [92, 75, 62], op = (\x -> x * x),
-                      test = (isDiv 3), testTrue = 3, testFalse = 4}
+                      test = (isDiv 3),  testTrue = 3, testFalse = 4}
     let monk6 = Monk {monkID = 6, items = [94, 86, 76, 67], op = (+1),
-                      test = (isDiv 11), testTrue = 5, testFalse = 2}
+                      test = (isDiv 11),  testTrue = 5, testFalse = 2}
     let monk7 = Monk {monkID = 7, items = [57], op = (+2),
-                      test = (isDiv 17), testTrue = 6, testFalse = 2}
+                      test = (isDiv 17),  testTrue = 6, testFalse = 2}
     let monks = [monk0, monk1, monk2, monk3, monk4, monk5, monk6, monk7]
     let order = [0, 1, 2, 3, 4, 5, 6, 7]
     -- map monkID -> monk
     let monkMap = Map.fromList (zip order monks)
     let countMap = Map.fromList (zip order [0,0,0,0,0,0,0,0])
     let (monkMap', countMap') =
-          goRounds monkMap countMap (Map.toAscList monkMap) 20
-    putStrLn ""
+          goRounds monkMap countMap (Map.toAscList monkMap) 10000
+    putStrLn $ show countMap'
     
     
     
