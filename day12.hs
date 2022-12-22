@@ -9,6 +9,8 @@ import qualified Data.Map as M
 import System.IO
 import Data.Char
 import Data.Maybe
+import Data.List
+import Debug.Trace
 
 main :: IO ()
 main =
@@ -16,9 +18,6 @@ main =
     input <- readFile "day12Test.txt"
     let input' = lines input
     let (vertices, start, end) = parseVertices input' 
-    putStrLn $ show start
-    putStrLn $ show end
-    putStrLn $ show vertices
     let x = length input'
     let y = length $ head input'
     let inBounds' = inBounds x y
@@ -26,11 +25,47 @@ main =
     let shortestPaths = dijkstra edges start
     let min = fromMaybe 0 (M.lookup end shortestPaths)
     putStrLn $ show min
-    putStrLn $ show shortestPaths
+   
 
-getMin :: [(Int, Int)] ->
+getMinQ :: [(Int, Int)] ->
+           M.Map (Int, Int) Int ->
+           Int ->
+           (Int, Int) ->
+           (Int, Int)
+getMinQ [] dist curVal curMin = curMin
+getMinQ ((x,y):xs) dist curVal curMin =
+  let next = (fromMaybe (maxBound :: Int) (M.lookup (x,y) dist))
+  in
+    if next <= curVal
+    then
+      getMinQ xs dist next (x,y)
+    else getMinQ xs dist curVal curMin
+
+relaxEdge :: (Int, Int) ->
+             (Int, Int) ->
+             M.Map (Int, Int) Int ->
+             M.Map (Int, Int) Int
+relaxEdge u v dist =
+  let alt = (fromMaybe (maxBound :: Int) (M.lookup u dist)) + 1
+      distv = fromMaybe (maxBound :: Int) (M.lookup v dist)
+  in
+    if alt < distv
+    then M.insert v alt dist
+    else dist
+  
+processQ :: [(Int, Int)] ->
+            M.Map (Int, Int) Int ->
+            M.Map (Int, Int) [(Int, Int)] ->
+            M.Map (Int, Int) Int
+processQ [] dist edges = dist
+processQ q dist edges =
+  let u = getMinQ q dist (maxBound :: Int) (-1, -1)
+      vs = fromMaybe [] (M.lookup u edges)
+      vs' = filter (`elem` q) vs
+      q' = delete u q
+  in
+    processQ q' (foldr (relaxEdge u) dist vs') edges
           
-
 
 dijkstra :: M.Map (Int, Int) [(Int, Int)] ->
             (Int, Int) ->
@@ -41,6 +76,7 @@ dijkstra edges source =
       dist = M.insert source 0 dist'
       q = map fst (M.toList edges)
   in
+    processQ q dist edges
     
   
   
@@ -53,7 +89,7 @@ filterEdge :: Int ->
               (Int, Int) ->
               Bool
 filterEdge n vertices vertex =
-  let val = fromMaybe 0 (M.lookup vertex vertices) in n <= val+1
+  let val = fromMaybe 0 (M.lookup vertex vertices) in val <= n+1
 
 foldEdges :: M.Map (Int, Int) Int ->
              ((Int, Int) -> Bool) ->
