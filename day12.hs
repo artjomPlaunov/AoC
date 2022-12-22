@@ -10,7 +10,6 @@ import System.IO
 import Data.Char
 import Data.Maybe
 
-
 main :: IO ()
 main =
   do
@@ -24,8 +23,27 @@ main =
     let y = length $ head input'
     let inBounds' = inBounds x y
     let edges = makeEdges vertices inBounds'
-    putStrLn $ show edges
+    let shortestPaths = dijkstra edges start
+    let min = fromMaybe 0 (M.lookup end shortestPaths)
+    putStrLn $ show min
+    putStrLn $ show shortestPaths
 
+getMin :: [(Int, Int)] ->
+          
+
+
+dijkstra :: M.Map (Int, Int) [(Int, Int)] ->
+            (Int, Int) ->
+            M.Map (Int, Int) Int
+dijkstra edges source =
+  let -- Set all distances to infinity, and the source distance to 0.
+      dist' = M.map (\_ -> (maxBound :: Int)) edges
+      dist = M.insert source 0 dist'
+      q = map fst (M.toList edges)
+  in
+    
+  
+  
 inBounds :: Int -> Int -> (Int, Int) -> Bool
 inBounds x y (i, j) =
   (0 <= i) && (i <= x) && (0 <= j) && (j <= y) 
@@ -56,9 +74,6 @@ makeEdges :: M.Map (Int, Int) Int ->
 makeEdges vertices inBounds =
   foldr (foldEdges vertices inBounds) M.empty (fmap fst (M.toList vertices))
   
-
-
-
 parseVertices :: [[Char]] -> (M.Map (Int, Int) Int, (Int, Int), (Int, Int))
 parseVertices lst = parseRows lst 0 M.empty (-1,-1) (-1,-1)
 
@@ -93,11 +108,13 @@ parseRow (c:cs) x y vertices start end =
       else
         parseRow cs x (y+1) (M.insert (x,y) (ord c) vertices) start' end'
       
-getStartEnd :: Int -> Int -> (Int, Int) -> (Int, Int) -> Char
+getStartEnd :: Int ->
+               Int ->
+               (Int, Int) ->
+               (Int, Int) ->
+               Char
                -> ((Int, Int), (Int, Int))
 getStartEnd x y start end c
   | c == 'S' = ((x,y), end)
   | c == 'E' = (start, (x,y))
   | otherwise = (start, end)
-    
-   
