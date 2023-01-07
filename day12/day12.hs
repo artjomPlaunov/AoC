@@ -15,18 +15,22 @@ import Debug.Trace
 main :: IO ()
 main =
   do
-    input <- readFile "day12Test.txt"
+    input <- readFile "day12.txt"
     let input' = lines input
     let (vertices, start, end) = parseVertices input' 
     let x = length input'
     let y = length $ head input'
     let inBounds' = inBounds x y
     let edges = makeEdges vertices inBounds'
-    let shortestPaths = dijkstra edges start
-    let min = fromMaybe 0 (M.lookup end shortestPaths)
-    putStrLn $ show min
-   
-
+    let shortPath= dijkstra edges end
+    let vs = M.toList vertices
+    let aLocs = map fst (filter (\v -> (snd v) `elem` [97, 83]) vs)
+    let a's = filter (\v -> (fst v) `elem` aLocs) (M.toList shortPath)
+    putStrLn $ show shortPath
+    --let res = minimum (map snd (M.toList a's))
+    --putStrLn $ show $ minimum $ map snd a's
+    
+  
 getMinQ :: [(Int, Int)] ->
            M.Map (Int, Int) Int ->
            Int ->
@@ -89,7 +93,7 @@ filterEdge :: Int ->
               (Int, Int) ->
               Bool
 filterEdge n vertices vertex =
-  let val = fromMaybe 0 (M.lookup vertex vertices) in val <= n+1
+  let val = fromMaybe 0 (M.lookup vertex vertices) in val >= n-1
 
 foldEdges :: M.Map (Int, Int) Int ->
              ((Int, Int) -> Bool) ->
