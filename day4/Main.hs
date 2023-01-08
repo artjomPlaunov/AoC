@@ -1,12 +1,25 @@
 import Data.List.Split
 
+type Pair = ((Integer, Integer), (Integer, Integer))
+
 main :: IO ()
 main = do
   inputLines <- (fmap lines . readFile) "day4.txt"
   let pairs = map parseInput inputLines
-  print pairs
+  let count = length $ filter isSubset pairs
+  let count = length $ filter isOverlap pairs
+  print count
 
-parseInput :: String -> ((Integer, Integer), (Integer, Integer))
+isSubset :: Pair -> Bool
+isSubset ((n1, n2), (n3, n4)) =
+  ((n1 >= n3) && (n2 <= n4)) || ((n3 >= n1) && (n4 <= n2))
+
+isOverlap :: Pair -> Bool
+isOverlap ((n1, n2), (n3, n4)) =
+  ((n1 >= n3) && (n1 <= n4)) || ((n3 >= n1) && (n3 <= n2))
+
+
+parseInput :: String -> Pair
 parseInput s =
   let pair = splitOn "," s
       pair1 = head pair

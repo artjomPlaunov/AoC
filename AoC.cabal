@@ -28,3 +28,20 @@ executable Day4
                        -Wmissing-home-modules
                        -Wpartial-fields
                        -Wredundant-constraints
+                       
+executable Day5
+  hs-source-dirs:      day5
+  main-is:             Main.hs
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5,
+                       split,
+                       containers
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-record-updates
+                       -Wincomplete-uni-patterns
+                       -Wmissing-export-lists
+                       -Wmissing-home-modules
+                       -Wpartial-fields
+                       -Wredundant-constraints

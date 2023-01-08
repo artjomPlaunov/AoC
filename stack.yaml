@@ -42,6 +42,8 @@ packages:
 #
 extra-deps:
   - bytestring-0.10.12.1@sha256:82dba4c2de4fdd8b419ed28aec2c14cfe4a3f43d1d6e2263ab26962e7398048e,6254
+  - debug-0.1.1@sha256:fd49dd02183e05848fd701d9894e440abd6a1a0eef0722246ced985d6a05265d,2394
+
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
