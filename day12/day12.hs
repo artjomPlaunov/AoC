@@ -26,9 +26,7 @@ main =
     let vs = M.toList vertices
     let aLocs = map fst (filter (\v -> (snd v) `elem` [97, 83]) vs)
     let a's = filter (\v -> (fst v) `elem` aLocs) (M.toList shortPath)
-    putStrLn $ show shortPath
-    --let res = minimum (map snd (M.toList a's))
-    --putStrLn $ show $ minimum $ map snd a's
+    putStrLn $ show a's
     
   
 getMinQ :: [(Int, Int)] ->
@@ -93,7 +91,7 @@ filterEdge :: Int ->
               (Int, Int) ->
               Bool
 filterEdge n vertices vertex =
-  let val = fromMaybe 0 (M.lookup vertex vertices) in val >= n-1
+  let val = fromMaybe 0 (M.lookup vertex vertices) in n <= val + 1
 
 foldEdges :: M.Map (Int, Int) Int ->
              ((Int, Int) -> Bool) ->
